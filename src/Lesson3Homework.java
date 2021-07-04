@@ -84,6 +84,35 @@ public class Lesson3Homework {
         System.out.println("Минимальное значение: " + min);
         System.out.println("Максимальное значение: " + max);
 
+        //Задача №7
+        printTask(7);
+
+        int[] myArray7 = {2, 2, 2, 1, 2, 2, 10, 1};
+
+        printArray(myArray7);
+        if (chekBalance(myArray7)) {
+            System.out.println("Yes, there is a balance");
+        } else {
+            System.out.println("No, there is no balance");
+        }
+
+        //Задача №8
+        printTask(8);
+
+        int[] myArray8 = {1, 2, 3, 4, 5, 6, 7, 8};
+
+        printArray(myArray8);
+        shfitArrayLeft(myArray8);
+        printArray(myArray8);
+        shfitArrayRight(myArray8);
+        printArray(myArray8);
+
+        shfitArray(myArray8, 3);
+        printArray(myArray8);
+
+        shfitArray(myArray8, -3);
+        printArray(myArray8);
+
     }
 
     // function for Task #5
@@ -114,4 +143,64 @@ public class Lesson3Homework {
     public static void printTask(int taskNum) {
         System.out.println("Задача №" + taskNum);
     }
+
+    //Task #7
+    public static boolean chekBalance(int[] array) {
+        int sumLeft = 0;
+        int sumRight = 0;
+        int length = array.length;
+
+        // Get sum of all
+        for( int i = 0; i < length; i++) {
+            sumRight = sumRight + array[i];
+        }
+
+        for( int i = 0; i < length; i++) {
+            sumLeft = sumLeft + array[i];
+            sumRight = sumRight - array[i];
+
+            if (sumLeft == sumRight) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Task #8
+    public static void shfitArrayLeft(int[] array) {
+        int length = array.length;
+        int firstItem = array[0];
+
+        for(int i=0; i < length-1; i++) {
+            array[i] = array[i+1];
+        }
+
+        array[length-1] = firstItem;
+    }
+
+    public static void shfitArrayRight(int[] array) {
+        int length = array.length;
+        int lastItem = array[length-1];
+
+        for(int i = length-1; i > 0; i--) {
+            array[i] = array[i-1];
+        }
+
+        array[0] = lastItem;
+    }
+
+    public static void shfitArray(int[] array, int shiftSize) {
+        if (shiftSize > 0) {
+            for(int i = 0; i < shiftSize; i++) {
+                shfitArrayRight(array);
+            }
+        } else {
+            for(int i = 0; i > shiftSize; i--) {
+                shfitArrayLeft(array);
+            }
+
+        }
+
+    }
+
 }
