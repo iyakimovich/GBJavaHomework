@@ -43,7 +43,7 @@ public class Lesson4Homework {
     }
 
     //human turn - reading from console
-    public static void humanTurn() {
+    public static boolean humanTurn() {
         Scanner scanner = new Scanner(System.in);
         int i;
         int j;
@@ -54,10 +54,11 @@ public class Lesson4Homework {
         } while (!isValidTurn(i,j));
 
         field[i-1][j-1] = CHAR_X;
+        return betterCheckForWin(CHAR_X, i, j);
     }
 
     //computer turn - random
-    public static void computerTurn() {
+    public static boolean computerTurn() {
         Random random = new Random();
         int i;
         int j;
@@ -67,10 +68,89 @@ public class Lesson4Homework {
         } while (!isValidTurn(i,j));
 
         field[i-1][j-1] = CHAR_0;
+        return betterCheckForWin(CHAR_0, i, j);
     }
 
     //check if the last turn with X or 0 finishes the game
-    public static boolean checkForWin(char c) {
+    public static boolean betterCheckForWin(char turnChar, int turnI, int turnJ) {
+        int strikeLengthRow = 1;
+
+        int i;
+        int j;
+
+        //go right
+        for (i = turnI - 1, j = turnJ - 1; (j < FIELD_SIZE-1) && (field[i][j+1] == turnChar); j++) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        //go left
+        for (i = turnI - 1, j = turnJ - 1; (j > 0) && (field[i][j-1] == turnChar); j--) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        strikeLengthRow = 1;
+        //go down
+        for (i = turnI - 1, j = turnJ - 1; (i < FIELD_SIZE-1) && (field[i+1][j] == turnChar); i++) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        //go up
+        for (i = turnI - 1, j = turnJ - 1; (i > 0) && (field[i-1][j] == turnChar); i--) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        strikeLengthRow = 1;
+        //go up-left diagonal;
+        for (i = turnI - 1, j = turnJ - 1; (i < FIELD_SIZE-1) &&(j < FIELD_SIZE-1) && (field[i+1][j+1] == turnChar); i++, j++) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        //go down-right diagonal;
+        for (i = turnI - 1, j = turnJ - 1; (i > 0) && (j > 0) && (field[i-1][j-1] == turnChar); i--, j--) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        strikeLengthRow = 1;
+        //go up-right diagonal;
+        for (i = turnI - 1, j = turnJ - 1; (i > 0) &&(j < FIELD_SIZE-1) && (field[i-1][j+1] == turnChar); i--, j++) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+        //go down-left diagonal;
+        for (i = turnI - 1, j = turnJ - 1; (i < FIELD_SIZE-1) && (j > 0) && (field[i+1][j-1] == turnChar); i++, j--) {
+            strikeLengthRow++;
+            if (strikeLengthRow == WIN_ROW_SIZE) {
+                return true;
+            }
+        }
+
+       return false;
+    }
+
+
+    //check if the last turn with X or 0 finishes the game
+    public static boolean checkForWinOld(char c) {
 
         //check win in rows
         for (int i=0; i < FIELD_SIZE; i++) {
@@ -143,28 +223,28 @@ public class Lesson4Homework {
         do {
             turnNumber++;
             if (turnNumber > lastTurnNumber) {
-                System.out.println("Ничья! Больще ходов нет!");
+                System.out.println("Ничья! Больше ходов нет!");
                 break;
             }
 
-            humanTurn();
+            boolean isGameOver;
+            isGameOver = humanTurn();
             printField();
 
-            if (checkForWin(CHAR_X)) {
+            if (isGameOver) {
                 System.out.println("Человек победил!");
                 break;
             }
 
-            computerTurn();
-            printField();
-
             turnNumber++;
             if (turnNumber > lastTurnNumber) {
-                System.out.println("Ничья! Больще ходов нет!");
+                System.out.println("Ничья! Больше ходов нет!");
                 break;
             }
 
-            if (checkForWin(CHAR_0)) {
+            isGameOver = computerTurn();
+            printField();
+            if (isGameOver) {
                 System.out.println("Компьютер победил!");
                 break;
             }
