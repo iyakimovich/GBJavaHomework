@@ -9,7 +9,7 @@ public class Lesson5Homework {
         employees[4] = new Employee("Леонид", "Марков", "начальник отдела", "leonid.markov@abc.com","223322", 600, 50);
 
         for (int i = 0; i < 5; i++) {
-            if (employees[i].age > 0) {
+            if (employees[i].age > 40) {
                 employees[i].print();
             }
         }
